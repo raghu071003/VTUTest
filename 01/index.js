@@ -1,15 +1,15 @@
 const express = require('express');
-const {performance} = require('performance');
+const {performance} = require('perf_hooks');
 
 const app = express();
 const PORT = 3000;
 
 const WINDOW_Size = 10;
-const API_URL = 'https://localhost:9876/numbers/';
+const API_URL = `http://localhost:4000/numbers`;
 const numbers =[];
 
 
-const handlenumbers= (n)=>{
+const handleNumbers= (n)=>{
     if(!numbers.includes(n)){
         if(numbers.length >= WINDOW_Size){
             numbers.shift()
@@ -18,23 +18,22 @@ const handlenumbers= (n)=>{
     }
 }
 
-async function getData(id){
-    try{
+async function getData(id) {
+    try {
         const startTime = performance.now();
-        const res = await fetch(API_URL+id);
+        const res = await fetch(API_URL);
         const endTime = performance.now();
-        const elapsedTIme = endTime - startTime;
+        const elapsedTime = endTime - startTime;
         
-        if(response.ok && elapsedTIme <=500){
+        if (res.ok && elapsedTime <= 500) {
             const data = await res.json();
-            // console.log(data);
-            const numbers = data.numbers;
-            numbers.forEach(n => handlenumbers(n));
+            console.log(data);
+            const receivedNumbers = data.numbers;
+            receivedNumbers.forEach(n => handleNumbers(n));
         }
         
-    }
-    catch(e){
-        console.error("Error Fetching Data")
+    } catch (e) {
+        console.error("Error Fetching Data", e);
     }
 }
 
@@ -56,7 +55,7 @@ app.get('/numbers/:id',async(req,res) =>{
         "windowPrevState":[],
         "windowCurrState":[...numbers],
         "numbers":[...numbers],
-        "avg":avg.toFixec(2)
+        "avg":AVerage.toFixed(2)
     })
 })
 
