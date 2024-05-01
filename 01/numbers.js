@@ -1,9 +1,21 @@
 const app = require('express')();
-let numbers = [1,3,5,7]
+
+
+
+
+
+/// change the numbers as required
+let numbers = [1,2,3,4,5,6]
+
+
+
+
+
+
 app.get('/numbers',(req,res)=>{
     console.log("Get request received");
     rNum = {
-        numbers:[1,3,5,7]
+        numbers:[...numbers]
     }
     res.send(rNum)
 })
